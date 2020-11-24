@@ -1,4 +1,10 @@
-class MyTask extends Thread {
+class MySuperClass {
+    public void printMessage() {
+        System.out.println("printing message from super class");
+    }
+}
+
+class MyTask extends MySuperClass implements Runnable {
 
     @Override
     public void run() {
@@ -8,6 +14,7 @@ class MyTask extends Thread {
             } catch (Exception ex) {
                 System.out.println(ex);
             }
+            printMessage();
             System.out.println("printing task no " + i + " on printer 2");
         }
     }
@@ -25,9 +32,11 @@ public class App {
         //Job1
         System.out.println("--Application Started--");
 
-        MyTask myTask = new MyTask();
+        Runnable r = new MyTask();
+        Thread myTask = new Thread(r); //child thread or worker thread
+
         //Job2
-        myTask.start();
+        myTask.start(); //will interally start run method
 
         //Job3
         for (int i = 0; i < 10; i++) {
