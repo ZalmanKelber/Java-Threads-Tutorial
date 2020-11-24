@@ -25,6 +25,20 @@ class MyThread extends Thread {
     }
 }
 
+class MyOtherThread extends Thread {
+
+    private Printer printer;
+
+    public MyOtherThread(Printer printer) {
+        this.printer = printer;
+    }
+
+    @Override
+    public void run() {
+        printer.simulatePrint(18, "Kabbalah.pdf");
+    }
+}
+
 public class App {
 
     //main thread
@@ -34,9 +48,11 @@ public class App {
         //one reference to printer object
         Printer printer = new Printer();
 
-        //thread stores single access to printer object
+        //threads store single access to printer object
         MyThread myThread = new MyThread(printer);
+        MyOtherThread myOtherThread = new MyOtherThread(printer);
         myThread.start();
+        myOtherThread.start();
 
         System.out.println("--Application Finished--");
     }
