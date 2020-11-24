@@ -1,22 +1,27 @@
-class MySuperClass {
-    public void printMessage() {
-        System.out.println("printing message from super class");
+class Printer {
+    public void simulatePrint(int pages, String docName) {
+        for (int i = 0; i < pages; i++) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+            System.out.println("print " + docName + ": page " + i);
+        }
     }
 }
 
-class MyTask extends MySuperClass implements Runnable {
+class MyThread extends Thread {
+
+    private Printer printer;
+
+    public MyThread(Printer printer) {
+        this.printer = printer;
+    }
 
     @Override
     public void run() {
-        for (int i = 0; i < 10; i++) {
-            try {
-                Thread.sleep(1);
-            } catch (Exception ex) {
-                System.out.println(ex);
-            }
-            printMessage();
-            System.out.println("printing task no " + i + " on printer 2");
-        }
+        printer.simulatePrint(10, "TaoTeChing.pdf");
     }
 }
 
@@ -24,26 +29,15 @@ public class App {
 
     //main thread
     public static void main(String[] args) {
-        //Two threads will run simultaneously so that Job2 is executed at the same
-        //time as Job3 and Job4
-        //Job1 -> Job3 -> Job4
-        //Job1 -> Job2
-
-        //Job1
         System.out.println("--Application Started--");
 
-        Runnable r = new MyTask();
-        Thread myTask = new Thread(r); //child thread or worker thread
+        //one reference to printer object
+        Printer printer = new Printer();
 
-        //Job2
-        myTask.start(); //will interally start run method
+        //thread stores single access to printer object
+        MyThread myThread = new MyThread(printer);
+        myThread.start();
 
-        //Job3
-        for (int i = 0; i < 10; i++) {
-            System.out.println("printing task no " + i + " on printer 1");
-        }
-
-        //Job4
         System.out.println("--Application Finished--");
     }
 }
