@@ -2,7 +2,7 @@ class Printer {
     public void simulatePrint(int pages, String docName) {
         for (int i = 0; i < pages; i++) {
             try {
-                Thread.sleep(1);
+                Thread.sleep(10);
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }
@@ -52,6 +52,11 @@ public class App {
         MyThread myThread = new MyThread(printer);
         MyOtherThread myOtherThread = new MyOtherThread(printer);
         myThread.start();
+        try {
+            myThread.join();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
         myOtherThread.start();
 
         System.out.println("--Application Finished--");
