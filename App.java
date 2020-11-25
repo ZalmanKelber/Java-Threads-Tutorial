@@ -1,5 +1,5 @@
 class Printer {
-    synchronized public void simulatePrint(int pages, String docName) {
+    public void simulatePrint(int pages, String docName) {
         for (int i = 0; i < pages; i++) {
             try {
                 Thread.sleep(100);
@@ -21,7 +21,9 @@ class MyThread extends Thread {
 
     @Override
     public void run() {
-        printer.simulatePrint(10, "TaoTeChing.pdf");
+        synchronized (printer) {
+            printer.simulatePrint(10, "TaoTeChing.pdf");
+        }
     }
 }
 
@@ -35,7 +37,9 @@ class MyOtherThread extends Thread {
 
     @Override
     public void run() {
-        printer.simulatePrint(18, "Kabbalah.pdf");
+        synchronized (printer) {
+            printer.simulatePrint(18, "Kabbalah.pdf");
+        }
     }
 }
 
